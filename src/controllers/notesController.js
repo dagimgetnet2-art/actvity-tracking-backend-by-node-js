@@ -1,3 +1,4 @@
+import { captureOwnerStack } from "react";
 import note from "../models/note.js";
 
 export const getAllnotes= async (req, res)=>{
@@ -26,11 +27,15 @@ export const createnote=async (req,res) => {
     res.status(500).json({message: error.message});
 }
 }
-export const getbyid= async (req,res)=>{
-    const note = await note.findById(req.params.id);
+export const updatebyid= async (req,res)=>{
+ try{   
+            const{title,content}=req.body
+const note = await note.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.status(200);
-    res.json(note);
+    res.json(note);  }
+catch{
 
+}
 }
 export const deletebyid = async (req,res)=>{
     const note = await note.findByIdAndDelete(req.params.id);
