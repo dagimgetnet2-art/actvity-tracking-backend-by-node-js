@@ -15,4 +15,3 @@ app.listen(5001, () => {
   console.log("Server is running on port 5001")
 })
 
-//mongodb+srv://dagimgetnet2_db_user:1nEKtE9qKsCj06PJ@cluster0.e0deh61.mongodb.net/
