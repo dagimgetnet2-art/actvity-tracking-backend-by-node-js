@@ -1,4 +1,3 @@
-import { captureOwnerStack } from "react";
 import note from "../models/note.js";
 
 export const getAllnotes= async (req, res)=>{
@@ -13,11 +12,22 @@ catch(error){
 
 }
 };
+export const getbyid= async (req,res)=>{
+    try{
+        const notebyid = await note.findById(req.params.id);
+        if (!notebyid) {
+            return res.status(404).json({ message: "Note not found" });
+        }
+        res.json(notebyid);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
 export const createnote=async (req,res) => {
     try{
         const{title,content}=req.body
-        const newNote=new note({title,content})
+        const newNote=new note({title,content} , { new: true });
         await newNote.save()
         res.status(201).json(newNote)
 
@@ -27,25 +37,31 @@ export const createnote=async (req,res) => {
     res.status(500).json({message: error.message});
 }
 }
+
+
 export const updatebyid= async (req,res)=>{
  try{   
-            const{title,content}=req.body
-const note = await note.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.status(200);
-    res.json(note);  }
-catch{
+            const{title,content}=req.body;
+const noteupdated = await note.findByIdAndUpdate(req.params.id, {title,content}, { new: true });
+    if (!noteupdated) {
+        return res.status(404).json({ message: "Note not found" });
+    }
+        res.status(201);
+    res.json({message: "updated successfully", note: noteupdated});  }
+
+catch(error){
+    console.error(error.message);
+    res.status(500).json({message: error.message});
 
 }
 }
+
+
+
 export const deletebyid = async (req,res)=>{
-    const note = await note.findByIdAndDelete(req.params.id);
+    const notedeleted = await note.findByIdAndDelete(req.params.id);
     res.status(200);
-    res.json(note);
+    res.json({message: "deleted successfully"});
+    res.json(notedeleted);
 }
 
-export const addbyid= async (req,res)=>{
-    const newNote = new note(req.body);
-    const savedNote = await newNote.save();
-    res.status(201);
-    res.json(savedNote);
-}
