@@ -5,7 +5,6 @@ import dotenv from "dotenv"
 import { ratelimiter } from "./middleware/rateLimiter.js";
 import cors from "cors"
 
-
 dotenv.config();
 console.log("Mongo URI exists:", !!process.env.MONGO_URI)
 const app = express();
